@@ -3,6 +3,7 @@ const router = express.Router()
 const Post = require('../models/Post')
 
 router.get('/', (req, res) => {
+    console.log(req.session)
     res.render('site2/index')
 })
 
@@ -32,9 +33,9 @@ router.get('/contact', (req, res) => {
 //     res.render('site2/register')
 // })
 
-router.get('/posts/new', (req, res) => {
-    res.render('site2/addpost')
-})
+// router.get('/posts/new', (req, res) => {
+//     res.render('site2/addpost')
+// })
 
 
 module.exports = router

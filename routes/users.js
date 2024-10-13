@@ -25,7 +25,7 @@ router.post('/login', async (req, res) => {
         if (user) {
             // Şifre eşleşmesi (eğer şifre hashlenmişse bcrypt kullanın)
             if (user.password === password) {
-                // USER SESSION
+                req.session.userId = user._id
                 res.redirect('/');
             } else {
                 res.redirect('/users/login');

@@ -10,13 +10,15 @@ const bodyParser = require('body-parser')
 const fileUpload = require('express-fileupload')
 const generateDate = require('./helpers/generateDate').generateDate
 const expressSession = require('express-session')
+const connectMongo = require('connect-mongo')
 
 mongoose.connect('mongodb://127.0.0.1/nodeblog_db');
 
 app.use(expressSession({
     secret: 'testotesto',
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: true,
+    store: connectMongo.create(mongoose.connection)
 }))
 
 app.use(fileUpload())
@@ -62,6 +64,7 @@ app.use('/', myMiddleware)
 const main = require('./routes/main')
 const posts = require('./routes/posts')
 const users = require('./routes/users')
+const { connect } = require('http2')
 
 
 app.use('/' , main)
