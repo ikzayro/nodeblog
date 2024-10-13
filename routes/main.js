@@ -24,13 +24,13 @@ router.get('/contact', (req, res) => {
     res.render('site2/contact')
 })
 
-router.get('/login', (req, res) => {
-    res.render('site2/login')
-})
+// router.get('/login', (req, res) => {
+//     res.render('site2/login')
+// })
 
-router.get('/register', (req, res) => {
-    res.render('site2/register')
-})
+// router.get('/register', (req, res) => {
+//     res.render('site2/register')
+// })
 
 router.get('/posts/new', (req, res) => {
     res.render('site2/addpost')
