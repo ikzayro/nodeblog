@@ -21,6 +21,14 @@ app.use(expressSession({
     store: connectMongo.create(mongoose.connection)
 }))
 
+
+// Flash - Message Middleware
+app.use((req, res, next) =>{
+    res.locals.sessionFlash = req.session.sessionFlash
+    delete req.session.sessionFlash
+    next()
+})
+
 app.use(fileUpload())
 
 app.use(express.static('public'))
