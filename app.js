@@ -61,12 +61,20 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 
 
-const myMiddleware = (req, res, next) => {
-    console.log('LOGGED')
+app.use((req, res, next) => {
+    const { userId } = req.session
+    if (userId) {
+        res.locals = {
+            displayLink: true
+        }
+    } else {
+        res.locals = {
+            displayLink: false
+        }
+    }
     next()
-}
+})
 
-app.use('/', myMiddleware)
 
 
 const main = require('./routes/main')
