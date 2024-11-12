@@ -7,9 +7,9 @@ router.get('/', (req, res) => {
     res.render('site2/index')
 })
 
-router.get('/about', (req, res) => {
-    res.render('site2/about')
-})
+// router.get('/admin', (req, res) => {
+//     res.render('admin/index')
+// })
 
 router.get('/blog', (req, res) => {
 

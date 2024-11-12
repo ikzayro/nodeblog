@@ -80,12 +80,13 @@ app.use((req, res, next) => {
 const main = require('./routes/main')
 const posts = require('./routes/posts')
 const users = require('./routes/users')
-const { connect } = require('http2')
+const admin = require('./routes/admin/index')
 
 
 app.use('/' , main)
 app.use('/posts', posts)
 app.use('/users', users)
+app.use('/admin', admin)
 
 
 app.listen(port, hostname, () => {
