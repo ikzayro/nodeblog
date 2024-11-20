@@ -3,6 +3,7 @@ const router = express.Router()
 const Post = require('../models/Post')
 const path = require('path')
 const Category = require('../models/Category')
+const User = require('../models/User')
 
 /*.get */
 router.get/*.get */('/new', (req, res) => {
@@ -16,8 +17,10 @@ router.get/*.get */('/new', (req, res) => {
 })
 
 router.get('/:id', (req, res) => {
-    Post.findById(req.params.id).then(post => {
-        res.render('site2/post', {post:post})
+    Post.findById(req.params.id).populate({ path: 'author', model: User }).then(post => {
+        Category.find({}).then(categories => {
+            res.render('site2/post', {post:post, categories: categories})
+        })
     })
 
 })
@@ -30,7 +33,8 @@ router.post('/test', (req, res) => {
 
     Post.create({
         ...req.body,
-        post_image: `/img/postimages/${post_image.name}`
+        post_image: `/img/postimages/${post_image.name}`,
+        author: req.session.userId
     },)
 
     req.session.sessionFlash = {
