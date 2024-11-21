@@ -1,5 +1,6 @@
 const express = require('express')
 const Category = require('../../models/Category')
+const Post = require('../../models/Post')
 const router = express.Router()
 
 
@@ -29,6 +30,15 @@ router.delete('/categories/:id', (req, res) => {
      
     Category.deleteOne({_id: req.params.id}).then(() => {
         res.redirect('/admin/categories')
+    })
+})
+
+
+router.get('/posts', (req, res) => {
+
+    Post.find({}).populate({ path: 'category', model: Category }).sort({$natural:-1}).then(posts => {
+            res.render('admin/posts', {posts:posts})
+        
     })
 })
 
