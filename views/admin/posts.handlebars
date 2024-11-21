@@ -31,8 +31,15 @@
 						<tr>
 							<td>{{title}}</td>
 							<td>{{category.name}}</td>
-							<td>edit</td>
-							<td>delete</td>
+							<td>
+								<a href="/admin/posts/edit/{{id}}" class="btn btn-warning">EDIT</a>
+							</td>
+							<td>
+								<form action="/admin/posts/{{id}}?_method=DELETE" method="POST">
+									<input type="hidden" name="_method" value="DELETE">
+									<button type="submit" class="btn btn-danger">DELETE</button>
+								</form>
+							</td>
 						</tr>
 						{{/each}}
 					</tbody>
