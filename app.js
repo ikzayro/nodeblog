@@ -8,8 +8,7 @@ const hostname = '127.0.0.1'
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const fileUpload = require('express-fileupload')
-const generateDate = require('./helpers/generateDate').generateDate
-const limit = require('./helpers/limit').limit
+const {generateDate, limit, truncate} = require('./helpers/hbs')
 const expressSession = require('express-session')
 const connectMongo = require('connect-mongo')
 const methodOverride = require('method-override')
@@ -24,12 +23,6 @@ app.use(expressSession({
 }))
 
 
-// Flash - Message Middleware
-app.use((req, res, next) =>{
-    res.locals.sessionFlash = req.session.sessionFlash
-    delete req.session.sessionFlash
-    next()
-})
 
 app.use(fileUpload())
 app.use(express.static('public'))
@@ -51,7 +44,8 @@ app.engine('handlebars', exphbs.engine({
     },
     helpers: {
         generateDate: generateDate,
-        limit: limit
+        limit: limit,
+        truncate: truncate
     }
 }))
 app.set('view engine', 'handlebars')
@@ -63,7 +57,7 @@ app.use(bodyParser.json())
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
 
-
+// DISPLAY LINK MIDDLEWARE
 app.use((req, res, next) => {
     const { userId } = req.session
     if (userId) {
@@ -78,6 +72,12 @@ app.use((req, res, next) => {
     next()
 })
 
+// Flash - Message Middleware
+app.use((req, res, next) =>{
+    res.locals.sessionFlash = req.session.sessionFlash
+    delete req.session.sessionFlash
+    next()
+})
 
 
 const main = require('./routes/main')
