@@ -9,6 +9,7 @@ const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const fileUpload = require('express-fileupload')
 const generateDate = require('./helpers/generateDate').generateDate
+const limit = require('./helpers/limit').limit
 const expressSession = require('express-session')
 const connectMongo = require('connect-mongo')
 const methodOverride = require('method-override')
@@ -49,7 +50,8 @@ app.engine('handlebars', exphbs.engine({
         allowProtoMethodsByDefault: true,
     },
     helpers: {
-        generateDate: generateDate
+        generateDate: generateDate,
+        limit: limit
     }
 }))
 app.set('view engine', 'handlebars')
