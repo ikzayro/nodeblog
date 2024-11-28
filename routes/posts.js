@@ -7,17 +7,48 @@ const User = require('../models/User')
 
 /*.get */
 router.get/*.get */('/new', (req, res) => {
-    if(!req.session.userId){
+    if (!req.session.userId) {
         res.redirect('users/login')
     }
     Category.find({}).then(categories => {
-        res.render('site2/addpost', {categories: categories})
+        res.render('site2/addpost', { categories: categories })
     })
-    
+
+})
+
+function escapeRegex(text) {
+    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+};
+
+router.get("/search", (req, res) => {
+    if (req.query.look) {
+        const regex = new RegExp(escapeRegex(req.query.look), 'gi');
+        Post.find({ "title": regex }).populate({ path: 'author', model: User }).sort({ $natural: -1 }).then(posts => {
+            Category.aggregate([
+                {
+                    $lookup: {
+                        from: 'posts',
+                        localField: '_id',
+                        foreignField: 'category',
+                        as: 'posts'
+                    }
+                },
+                {
+                    $project: {
+                        _id: 1,
+                        name: 1,
+                        num_of_posts: { $size: '$posts' }
+                    }
+                }
+            ]).then(categories => {
+                res.render('site2/blog', { posts: posts, categories: categories })
+            })
+        });
+    }
 })
 
 router.get('/category/:categoryId', (req, res) => {
-    Post.find({category: req.params.categoryId}).populate({path: 'category', model: Category}).populate({ path: 'author', model: User }).then(posts => {
+    Post.find({ category: req.params.categoryId }).populate({ path: 'category', model: Category }).populate({ path: 'author', model: User }).then(posts => {
         Category.aggregate([
             {
                 $lookup: {
@@ -35,7 +66,7 @@ router.get('/category/:categoryId', (req, res) => {
                 }
             }
         ]).then(categories => {
-            res.render('site2/blog', {posts: posts, categories: categories})
+            res.render('site2/blog', { posts: posts, categories: categories })
         })
     })
 })
@@ -59,10 +90,10 @@ router.get('/:id', (req, res) => {
                 }
             }
         ]).then(categories => {
-            Post.find({}).populate({ path: 'author', model: User }).sort({$natural:-1}).then(posts => {
-                res.render('site2/post', {post:post, categories: categories, posts: posts})
+            Post.find({}).populate({ path: 'author', model: User }).sort({ $natural: -1 }).then(posts => {
+                res.render('site2/post', { post: post, categories: categories, posts: posts })
             })
-            
+
         })
     })
 
